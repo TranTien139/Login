@@ -1,0 +1,64 @@
+<!-- views/profile.ejs -->
+<!doctype html>
+<html>
+<head>
+	<title>Node Authentication</title>
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+	<style>
+		.page-header{ margin: 20px 0px;}
+	</style>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+	<div class="page-header text-right">
+		<a href="/logout" class="btn btn-default btn-sm">Logout</a>
+	</div>
+
+	<div class="row">
+
+		<!-- LOCAL INFORMATION -->
+		<div class="col-sm-6">
+			<div class="well">
+				<h3><span class="fa fa-user"></span> Local</h3>
+					<p>
+						<strong>id</strong>: <%= user._id%><br>
+						<strong>email</strong>: <%= user.local.email %><br>
+						<strong>name</strong>: <%= user.local.name %>
+					</p>
+
+			</div>
+			<div class="list_user"><h3>List user</h3>
+				<ul>
+					<li>dsds</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="col-sm-6">
+			<ul class="pages">
+				<li class="chat page">
+					<div class="chatArea">
+						<ul class="messages"></ul>
+					</div>
+					<input class="inputMessage" placeholder="Type here..."/>
+				</li>
+				<li class="login page">
+					<div class="form">
+						<h3 class="title">What's your nickname?</h3>
+						<input class="usernameInput" type="text" maxlength="14" />
+					</div>
+				</li>
+			</ul>
+		</div>
+
+	</div>
+</div>
+
+<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="/socket.io.js"></script>
+<script src="/main.js"></script>
+
+</body>
+</html>
