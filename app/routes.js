@@ -1,4 +1,6 @@
 // app/routes.js
+
+var User = require('../app/models/user.js');
 module.exports = function(app, passport) {
 
 	// =====================================
@@ -6,17 +8,23 @@ module.exports = function(app, passport) {
 	// =====================================
 
 	app.get('/', function(req, res) {
-        res.render('login.ejs', { message: req.flash('loginMessage') });
+
+        if(req.isAuthenticated()){
+        	res.redirect('/home');
+		}else {
+            res.render('login.ejs', { message: req.flash('loginMessage') });
+		}
+
 	});
 
-	// =====================================
-	// LOGIN ===============================
-	// =====================================
-	// show the login form
 	app.get('/login', function(req, res) {
 
 		// render the page and pass in any flash data if it exists
-		res.render('login.ejs', { message: req.flash('loginMessage') });
+        if(req.isAuthenticated()){
+            res.redirect('/home');
+        }else {
+            res.render('login.ejs', { message: req.flash('loginMessage') });
+		}
 	});
 
 	// process the login form
@@ -33,7 +41,11 @@ module.exports = function(app, passport) {
 	app.get('/signup', function(req, res) {
 
 		// render the page and pass in any flash data if it exists
-		res.render('signup.ejs', { message: req.flash('signupMessage') });
+        if(req.isAuthenticated()){
+            res.redirect('/home');
+        }else {
+            res.render('signup.ejs', {message: req.flash('signupMessage')});
+        }
 	});
 
 	// process the signup form
@@ -43,14 +55,10 @@ module.exports = function(app, passport) {
 		failureFlash : true // allow flash messages
 	}));
 
-	// =====================================
-	// PROFILE SECTION =========================
-	// =====================================
-	// we will want this protected so you have to be logged in to visit
 	// we will use route middleware to verify this (the isLoggedIn function)
 	app.get('/home', isLoggedIn, function(req, res) {
-		res.render('profile.ejs', {
-			user : req.user // get the user out of session and pass to template
+		res.render('index.ejs', {
+			user : req.user
 		});
 	});
 
@@ -61,6 +69,61 @@ module.exports = function(app, passport) {
 		req.logout();
 		res.redirect('/');
 	});
+
+	app.get('/profile/:id_member',isLoggedIn, function (req, res) {
+			var user_member =  req.params.id_member;
+			var user = User.findOne({"_id":user_member},function (err,users) {
+                if (!err) {
+                    res.render('profile.ejs', {
+                        user: users
+                    });
+                } else {
+                    res.send(JSON.stringify(err), {
+                        'Content-Type': 'application/json'
+                    }, 404);
+                }
+            });
+    });
+
+    app.post('/update-profile/:id_member',function (req, res) {
+        var user_member =  req.params.id_member;
+        User.findOne({"_id":user_member},function (err,users) {
+            if (!err) {
+                users.local.name = req.body.name;
+                users.local.email = req.body.email;
+                users.local.image = req.body.image;
+                users.save(function (err) {
+                    res.render('profile.ejs', {
+                        user: users
+                    });
+                });
+            } else {
+                res.send(JSON.stringify(err), {
+                    'Content-Type': 'application/json'
+                }, 404);
+            }
+        });
+    });
+
+    app.get("/search_friend", isLoggedIn, function (req, res) {
+        var regex = new RegExp(req.query["keyword"], 'i');
+        var query = User.find({$or: [{'user.local.name': regex}, {'user.local.email': regex}]}).limit(100);
+        query.exec(function (err, users) {
+            if (!err) {
+                res.render('search.ejs', {
+                    key: req.query.keyword,
+                    result: users,
+                    user: req.user
+                });
+
+            } else {
+                res.send(JSON.stringify(err), {
+                    'Content-Type': 'application/json'
+                }, 404);
+            }
+        });
+
+    });
 
 
     // =====================================
