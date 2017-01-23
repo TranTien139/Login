@@ -2,45 +2,47 @@
 <!doctype html>
 <html>
 <head>
-	<title>Node Authentication</title>
-	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
-	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
-	<style>
-		.page-header{ margin: 20px 0px;}
-	</style>
-	<link rel="stylesheet" href="style.css">
+    <title>Node Authentication</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <style>
+        .page-header {
+            margin: 20px 0px;
+        }
+    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="container">
-	<div class="page-header text-right">
-		<a href="/logout" class="btn btn-default btn-sm">Logout</a>
-	</div>
-	<div class="row">
-
-		<div class="col-sm-6">
-			<!--<div class="well">-->
-				<!--<h3><span class="fa fa-user"></span> Local</h3>-->
-					<!--<p>-->
-						<!--<strong>id</strong>: <%= user._id%><br>-->
-						<!--<strong>email</strong>: <%= user.local.email %><br>-->
-						<!--<strong>name</strong>: <%= user.local.name %>-->
-					<!--</p>-->
-
-			<!--</div>-->
-			<div class="list_user"><h3>List user</h3>
-				<ul>
-					<li>hello</li>
-				</ul>
-			</div>
-		</div>
-
-		<div class="col-sm-6">
-		</div>
-
-	</div>
+    <div class="page-header text-right">
+        <ul class="list-inline">
+            <li>Xin chào: <%= user.local.name %></li>
+            <li>
+                <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+            </li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="list_user"><h3>List user</h3>
+                <ul>
+                    <li>hello</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm-6">
+        </div>
+    </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script type="text/javascript">
+    if (window.location.hash == '#_=_') {
+        history.replaceState
+            ? history.replaceState(null, null, window.location.href.split('#')[0])
+            : window.location.hash = '';
+    }
+</script>
 <script src="/main.js"></script>
 
 </body>
