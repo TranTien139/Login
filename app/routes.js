@@ -125,6 +125,17 @@ module.exports = function(app, passport) {
         });
     });
 
+    app.post("/send-add-friend/:me/:friend",isLoggedIn, function (req, res) {
+        var me =  req.params.me;
+        var friend =  req.params.friend;
+        User.findOne({ '_id' : me}, function(err, user) {
+            if(err) return done(err);
+            if(user){
+                user.followers.push({userId: userId});
+                user.save();
+            }
+        });
+    });
 
     // =====================================
     // FACEBOOK ROUTES =====================

@@ -1,9 +1,10 @@
 <% include partical/header.ejs %>
-<div class="container">
-    <div class="bg-profile">
+<div class="container" ng-app ="profileApp">
+    <div class="bg-profile" ng-controller="profileController">
+        {{ msg }}
         <img src="<%= user.local.image %>" width="100" height="100">
         <% if(user_me._id.toString().trim() != user._id.toString().trim()){ %>
-        <button class="btn btn-warning" style="position: absolute; bottom: 10px; right: 20px;">add friend</button>
+            <button class="btn btn-warning" style="position: absolute; bottom: 10px; right: 20px;" ng-click ="sendAddFriend('<%= user_me._id.toString().trim() %>','<%= user._id.toString().trim() %>')">add friend</button>
         <% } %>
     </div>
 </div>
@@ -28,7 +29,6 @@
         </form>
     </div>
     <div class="col-sm-6">
-
     </div>
     <% } %>
 </div>
