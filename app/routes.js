@@ -75,7 +75,8 @@ module.exports = function(app, passport) {
 			var user = User.findOne({"_id":user_member},function (err,users) {
                 if (!err) {
                     res.render('profile.ejs', {
-                        user: users
+                        user: users,
+                        user_me: req.user,
                     });
                 } else {
                     res.send(JSON.stringify(err), {
@@ -107,22 +108,21 @@ module.exports = function(app, passport) {
 
     app.get("/search_friend", isLoggedIn, function (req, res) {
         var regex = new RegExp(req.query["keyword"], 'i');
-        var query = User.find({$or: [{'user.local.name': regex}, {'user.local.email': regex}]}).limit(100);
+        var query = User.find({$or: [{"local.name": regex}, {"local.email": regex}]}).limit(100);
         query.exec(function (err, users) {
             if (!err) {
+                console.log(users);
                 res.render('search.ejs', {
                     key: req.query.keyword,
                     result: users,
                     user: req.user
                 });
-
             } else {
                 res.send(JSON.stringify(err), {
                     'Content-Type': 'application/json'
                 }, 404);
             }
         });
-
     });
 
 
@@ -144,7 +144,6 @@ module.exports = function(app, passport) {
         req.logout();
         res.redirect('/');
     });
-
 };
 
 // route middleware to make sure

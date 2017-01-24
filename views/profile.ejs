@@ -1,38 +1,36 @@
-<!-- views/profile.ejs -->
-<!doctype html>
-<html>
-<head>
-    <title>Node Authentication</title>
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
-    <style>
-        .page-header {
-            margin: 20px 0px;
-        }
-    </style>
-    <!--<link rel="stylesheet" href="style.css">-->
-</head>
-<body>
+<% include partical/header.ejs %>
 <div class="container">
+    <div class="bg-profile">
+        <img src="<%= user.local.image %>" width="100" height="100">
+        <% if(user_me._id.toString().trim() != user._id.toString().trim()){ %>
+        <button class="btn btn-warning" style="position: absolute; bottom: 10px; right: 20px;">add friend</button>
+        <% } %>
+    </div>
+</div>
+
+<div class="container">
+    <% if(user_me._id.toString().trim() === user._id.toString().trim()){ %>
     <div class="col-sm-6">
         <div class="form-group"><a href="/home">về trang chủ</a></div>
         <form action="/update-profile/<%= user._id %>" method="post">
         <div class="form-group">
-            <input type="text" class="form-control" value="<%= user.local.name %>" name="name">
+            <input type="text" class="form-control" value="<%= user.local.name %>" name="name" palaceholder="full name">
         </div>
         <div class="form-group">
-            <input type="email" class="form-control" value="<%= user.local.email %>" name="email">
+            <input type="email" class="form-control" value="<%= user.local.email %>" name="email" palaceholder="email">
         </div>
         <div class="form-group">
-            <input type="text" class="form-control" value="<%= user.local.image %>" name="image">
+            <input type="text" class="form-control" value="<%= user.local.image %>" name="image" palaceholder="image">
         </div>
         <div class="form-group">
             <button class="btn btn-primary" type="submit">save</button>
         </div>
         </form>
     </div>
+    <div class="col-sm-6">
+
+    </div>
+    <% } %>
 </div>
 
-<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-</body>
-</html>
+<% include partical/footer.ejs %>

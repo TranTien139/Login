@@ -1,29 +1,5 @@
-<!-- views/profile.ejs -->
-<!doctype html>
-<html>
-<head>
-	<title>Node Authentication</title>
-	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
-	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
-	<style>
-		.page-header {
-			margin: 20px 0px;
-		}
-	</style>
-	<!--<link rel="stylesheet" href="style.css">-->
-</head>
-<body>
+<% include partical/header.ejs %>
 <div class="container">
-	<div class="page-header text-right">
-		<ul class="list-inline">
-			<li class="pull-left"><form method="get" action="/search_friend"><input type="text" class="form-control" name="keyword" width="300px"></form></li>
-			<li><img src="<%= user.local.image %>" width="50" height="50"/></li>
-			<li><a href="/profile/<%= user._id %>">Xin chào: <%= user.local.name %> </a></li>
-			<li>
-				<a href="/logout" class="btn btn-default btn-sm">Logout</a>
-			</li>
-		</ul>
-	</div>
 	<div class="row">
 		<div class="col-sm-6">
 			<div class="list_user"><h3>List user</h3>
@@ -37,15 +13,5 @@
 	</div>
 </div>
 
-<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-<script type="text/javascript">
-    if (window.location.hash == '#_=_') {
-        history.replaceState
-            ? history.replaceState(null, null, window.location.href.split('#')[0])
-            : window.location.hash = '';
-    }
-</script>
-<script src="/main.js"></script>
+<% include partical/footer.ejs %>
 
-</body>
-</html>
