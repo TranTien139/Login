@@ -75,8 +75,8 @@ module.exports = function(app, passport) {
 			var user = User.findOne({"_id":user_member},function (err,users) {
                 if (!err) {
                     res.render('profile.ejs', {
-                        user: users,
-                        user_me: req.user,
+                        user_other: users,
+                        user: req.user,
                     });
                 } else {
                     res.send(JSON.stringify(err), {
@@ -94,9 +94,8 @@ module.exports = function(app, passport) {
                 users.local.email = req.body.email;
                 users.local.image = req.body.image;
                 users.save(function (err) {
-                    res.render('profile.ejs', {
-                        user: users
-                    });
+                    backURL=req.header('Referer') || '/';
+                    res.redirect(backURL);
                 });
             } else {
                 res.send(JSON.stringify(err), {
@@ -131,9 +130,10 @@ module.exports = function(app, passport) {
         User.findOne({ '_id' : me}, function(err, user) {
             if(err) return done(err);
             if(user){
-                user.followers.push({userId: userId});
+                user.followers.push({userId: friend});
                 user.save();
             }
+            res.redirect('/profile/'+friend);
         });
     });
 

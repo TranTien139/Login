@@ -1,5 +1,11 @@
-<div style="position: absolute; width:150px; height: 100%; right: 0px; top: 100px;" >
+<div style="position: absolute; width:240px; height: 100%; right: 0px; top: 100px;" >
 <ul>
-    <li>asa</li>
+    <% if(user.followers.length >0){%>
+    <% for(var i=0; i< user.followers.length; i++){ %>
+    <li><%= user.followers[i].userId %></li>
+    <% } %>
+    <% }else{ %>
+
+    <% } %>
 </ul>
 </div>

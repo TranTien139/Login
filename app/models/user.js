@@ -12,8 +12,8 @@ var userSchema = mongoose.Schema({
         image        : String,
         password     : String,
     },
-    following:[{useriId:String}],
-    followers:[{useriId:String}]
+    followers:[{userId:String}],
+    following:[{userId:String}]
 });
 
 // methods ======================
