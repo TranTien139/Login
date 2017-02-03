@@ -1,8 +1,8 @@
 <div style="position: absolute; width:240px; height: 100%; right: 0px; top: 100px;" >
-<ul>
-    <% if(user.followers.length >0){%>
-    <% for(var i=0; i< user.followers.length; i++){ %>
-    <li><%= user.followers[i].userId %></li>
+<ul style="list-style: none; line-height: 4;" id="list_friend">
+    <% if(friend.length >0){%>
+    <% for(var i=0; i< friend.length; i++){ %>
+    <li><img src="<%= friend[i].local.image %>" width="50" height="50"><%= friend[i].local.name %></li>
     <% } %>
     <% }else{ %>
 

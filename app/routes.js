@@ -1,6 +1,7 @@
 // app/routes.js
 
 var User = require('../app/models/user.js');
+var mongoose = require('mongoose');
 module.exports = function(app, passport) {
 
 	// =====================================
@@ -57,9 +58,36 @@ module.exports = function(app, passport) {
 
 	// we will use route middleware to verify this (the isLoggedIn function)
 	app.get('/home', isLoggedIn, function(req, res) {
-		res.render('index.ejs', {
-			user : req.user
-		});
+        var user = req.user;
+
+        var j = user.followers;
+        var MyObjectStringify = "[";
+        var last = j.length;
+        var count = 0;
+        if (last > 0) {
+            for (var x = 0; x < j.length; x++) {
+                MyObjectStringify += '{"_id":' + JSON.stringify(j[x].userId) + '}';
+                count++;
+                if (count < last)
+                    MyObjectStringify += ",";
+            }
+        }
+        MyObjectStringify += "]";
+        var list = JSON.parse(MyObjectStringify);
+        if (list.length > 0){
+        User.find({$or: list}, function (err, friend) {
+            res.render('index.ejs', {
+                user: user,
+                friend: friend
+            });
+        });
+    }else {
+            res.render('index.ejs', {
+                user: user,
+                friend: ''
+            });
+    }
+
 	});
 
 	// =====================================
