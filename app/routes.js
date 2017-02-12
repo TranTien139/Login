@@ -2,7 +2,7 @@
 
 var User = require('../app/models/user.js');
 var mongoose = require('mongoose');
-module.exports = function(app, passport) {
+module.exports = function(app, passport,server) {
 
 	// =====================================
 	// HOME PAGE (with login links) ========
@@ -161,8 +161,15 @@ module.exports = function(app, passport) {
                 user.followers.push({userId: friend});
                 user.save();
             }
-            res.redirect('/profile/'+friend);
         });
+        User.findOne({ '_id' : friend}, function(err, user) {
+            if(err) return done(err);
+            if(user){
+                user.followers.push({userId: me});
+                user.save();
+            }
+        });
+        res.redirect('/profile/'+friend);
     });
 
     // =====================================
@@ -183,7 +190,41 @@ module.exports = function(app, passport) {
         req.logout();
         res.redirect('/');
     });
+
+    var io = require('socket.io')(server);
+    var nicknames = [];
+    var users={};
+    io.on('connection', function(socket){
+        socket.on('new user', function (data, callback) {
+            if(data in users){
+                callback(false);
+            } else{
+                callback(true);
+                socket.nickname = data;
+                users[socket.nickname] = socket;
+                UpdateNickName();
+            }
+        });
+        socket.on('chat message', function(msg){
+            if(msg.chat_with !='') {
+                users[msg.chat_with].emit('gui-lai', {nick: socket.nickname, msg: msg.msg});
+            }else {}
+        });
+
+        function UpdateNickName() {
+            io.sockets.emit('usernames',Object.keys(users));
+        }
+
+        socket.on('disconnect', function (data) {
+            if(!socket.nickname) return;
+            delete users[socket.nickname];
+            UpdateNickName();
+        });
+    });
+
 };
+
+
 
 // route middleware to make sure
 function isLoggedIn(req, res, next) {
