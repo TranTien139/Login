@@ -193,7 +193,9 @@ module.exports = function(app, passport,server) {
 
     var io = require('socket.io')(server);
     var nicknames = [];
+
     var users={};
+
     io.on('connection', function(socket){
         socket.on('new user', function (data, callback) {
             if(data in users){
@@ -207,7 +209,7 @@ module.exports = function(app, passport,server) {
         });
         socket.on('chat message', function(msg){
             if(msg.chat_with !='') {
-                users[msg.chat_with].emit('gui-lai', {nick: socket.nickname, msg: msg.msg});
+                users[msg.chat_with].emit('gui-lai', {nick: msg.name_chat_with, msg: msg.msg});
             }else {}
         });
 
