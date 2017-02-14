@@ -1,6 +1,7 @@
 // app/routes.js
 
 var User = require('../app/models/user.js');
+var Status = require('../app/models/status.js');
 var mongoose = require('mongoose');
 module.exports = function(app, passport,server) {
 
@@ -172,6 +173,22 @@ module.exports = function(app, passport,server) {
         res.redirect('/profile/'+friend);
     });
 
+    app.post("/add-status",isLoggedIn, function (req, res) {
+        var content =  req.body.content_status;
+        var status = new Status();
+        status.content = content;
+        status.like = 0;
+        status.share = 0;
+        status.comment = [];
+        status.user.name = req.body.user_name;
+        status.user.email = req.body.user_email;
+        status.user.image = req.body.user_image;
+        status.userId = req.body.user_id;
+        status.save();
+        res.redirect('/home');
+    });
+
+
     // =====================================
     // FACEBOOK ROUTES =====================
     // =====================================
@@ -209,7 +226,7 @@ module.exports = function(app, passport,server) {
         });
         socket.on('chat message', function(msg){
             if(msg.chat_with !='') {
-                users[msg.chat_with].emit('gui-lai', {nick: msg.name_chat_with, msg: msg.msg});
+                users[msg.chat_with].emit('gui-lai', {nick: msg.name_chat, msg: msg.msg});
             }else {}
         });
 

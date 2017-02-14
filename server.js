@@ -35,5 +35,7 @@ require('./app/routes.js')(app, passport,server);
 //     console.log('The magic happens on port ' + port);
 // });
 
-server.listen(port, "127.0.0.1");
+server.listen(port, "127.0.0.1",function () {
+    console.log('The magic happens on port ' + port);
+});
 

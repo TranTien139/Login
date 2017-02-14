@@ -37,12 +37,11 @@ $(document).ready(function(){
 function displayData(data){
     $('#messages').append("<span class='msg'><b>"+data.nick+":</b>"+data.msg+"</span></br>");
 }
-function get_name_chat($data) {
-    var username = $(this).text();
-    $('.head_chat_box .name_chat_with').text(username);
+function get_name_chat($data,$username) {
+    $('.head_chat_box .name_chat_with').text($username);
     $('.box_chat').show();
-    $('#name_chat_with').val(username);
-    $('#chat_with').attr('value',$data);
+    $('#name_chat_with').val($username);
+    $('#chat_with').val($data);
 }
 
 
