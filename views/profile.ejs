@@ -28,6 +28,9 @@
         </form>
     </div>
     <div class="col-sm-6">
+        <% if(timeline.length>0){ for(var i=0;i<timeline.length; i++){  %>
+        <div><img src="<%= timeline[i].user.image %>" width="50px" height="50px;" /><span><%= timeline[i].user.name %></span>&nbsp;&nbsp;<%= new Date(timeline[i].date).toISOString() %><div><%= timeline[i].content %></div></div>
+        <%}} %>
     </div>
     <% } %>
 </div>

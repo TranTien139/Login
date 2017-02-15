@@ -2,7 +2,9 @@
 
 var User = require('../app/models/user.js');
 var Status = require('../app/models/status.js');
+var NewFeed = require('../app/controller/statusController.js');
 var mongoose = require('mongoose');
+
 module.exports = function(app, passport,server) {
 
 	// =====================================
@@ -77,15 +79,20 @@ module.exports = function(app, passport,server) {
         var list = JSON.parse(MyObjectStringify);
         if (list.length > 0){
         User.find({$or: list}, function (err, friend) {
-            res.render('index.ejs', {
-                user: user,
-                friend: friend
-            });
+            var newfeed =  NewFeed.getNewFeed(j,function (err, data) {
+                res.render('index.ejs', {
+                    user: user,
+                    friend: friend,
+                    newfeed:data
+                });
+           });
+
         });
     }else {
             res.render('index.ejs', {
                 user: user,
-                friend: ''
+                friend: '',
+                newfeed:''
             });
     }
 
@@ -103,10 +110,14 @@ module.exports = function(app, passport,server) {
 			var user_member =  req.params.id_member;
 			var user = User.findOne({"_id":user_member},function (err,users) {
                 if (!err) {
-                    res.render('profile.ejs', {
-                        user_other: users,
-                        user: req.user,
+                    NewFeed.getNewFeedMe(user_member,function (err, data) {
+                        res.render('profile.ejs', {
+                            user_other: users,
+                            user: req.user,
+                            timeline: data
+                        });
                     });
+
                 } else {
                     res.send(JSON.stringify(err), {
                         'Content-Type': 'application/json'

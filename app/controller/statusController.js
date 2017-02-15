@@ -1,45 +1,30 @@
 /**
  * Created by Tran Tien on 14/02/2017.
  */
-var Waste = require('../app/models/status.js');
-module.exports.postWaste = function (req, res){
-    var waste = new Waste(req.body);
-    waste.save();
+var Waste = require('../../app/models/status.js');
 
-    Waste.find({})
-        .sort({date: -1}).exec(function(err, allWastes){
-        if (err){
-            res.error(err);
-        } else {
-            res.json(allWastes);
-        }
-    });
-}
+function  getNewFeed(follower,callback) {
 
-module.exports.getWastes = function (req, res){
-    if (!req.body.following){
-        Waste.find({})
-            .sort({date: -1})
-            .exec(function(err, allWastes){
-                if (err){
-                    res.error(err)
-                } else {
-                    res.json(allWastes);
-                }
-            })
-    } else {
         var requestedWastes = [];
-        for (var i = 0, len = req.body.following.length; i < len; i++){
-            requestedWastes.push({userId: req.body.following[i].userId});
+        if(follower.length>0) {
+            for (var i = 0, len = follower.length; i < len; i++) {
+                requestedWastes.push({userId: follower[i].userId});
+            }
         }
         Waste.find({$or: requestedWastes})
             .sort({date: -1})
             .exec(function(err, allWastes){
-                if (err){
-                    res.error(err)
-                } else {
-                    res.json(allWastes);
-                }
-            })
-    };
+                callback(err,allWastes);
+            });
 }
+function  getNewFeedMe(id,callback) {
+
+    Waste.find({"userId":id})
+        .sort({date: -1})
+        .exec(function(err, allWastes){
+            callback(err,allWastes);
+        });
+}
+
+module.exports.getNewFeedMe = getNewFeedMe;
+module.exports.getNewFeed = getNewFeed;
